@@ -1,5 +1,6 @@
 <?php
-
+// Code revised: 4/16/2026
+if ( ! defined( 'ABSPATH' ) ) exit;
 // ========================================= >>> atw_slider_shortcode <<< ===============================
 
 function atw_slider_shortcode( $args = '' ) {
@@ -401,15 +402,15 @@ function atw_slider_do_footer() {
             if ( atw_posts_get_slider_opt( 'numberThumbs', $name) ) {
                 $slides = atw_posts_get_slider_opt( 'numberThumbs', $name);
             }
-            echo 'jQuery("#' . $id . '-thumbs").flexslider({namespace: "atwk-",selector:".slides > .atwk-slide", animation:"slide",controlNav:false,';
+            echo 'jQuery("#' . esc_js($id) . '-thumbs").flexslider({namespace: "atwk-",selector:".slides > .atwk-slide", animation:"slide",controlNav:false,';
 
             //atw_slider_echo_opt_tf( 'no_animationLoop', $name, false );
-            echo 'slideshow:false,animationLoop:true,itemWidth:150,minItems:' . $slides . ',maxItems:' . $slides .',itemMargin:0,asNavFor:"#' . $id . '" });' . "\n";
+            echo 'slideshow:false,animationLoop:true,itemWidth:150,minItems:' . esc_js($slides) . ',maxItems:' . esc_js($slides) .',itemMargin:0,asNavFor:"#' . esc_js($id) . '" });' . "\n";
         }
 
 
         $fitvids = atw_posts_get_slider_opt( 'video' , $name) ? '.fitVids()' : '';
-        echo 'jQuery("#' . $id . '")'. $fitvids . '.flexslider({namespace: "atwk-", selector:".slides > .atwk-slide",';     // flexslider args go here..
+        echo 'jQuery("#' . esc_js($id) . '")'. esc_js($fitvids) . '.flexslider({namespace: "atwk-", selector:".slides > .atwk-slide",';     // flexslider args go here..
         if ( $slider_type == 'fader')
             echo 'animation:"fade",';
         else
@@ -429,7 +430,7 @@ function atw_slider_do_footer() {
             echo 'controlNav:false,';                    // turn off for none
         else if ($pager == 'sliding') {
             echo 'controlNav:false,';    // sliding carousel
-            echo 'sync:"#' . $id .'-thumbs",';
+            echo 'sync:"#' . esc_js($id) .'-thumbs",';
         }
         else if ($pager == 'thumbnails' && $slider_type != 'carousel' && $content_type != 'posts') { // no thumbnails for carousel or posts - don't really look right
             echo 'controlNav:"thumbnails",';                        // if thumbnails
@@ -526,18 +527,18 @@ function atw_gallery_shortcode_filter( $args = '' ) {
 function atw_slider_echo_opt_val( $opt, $name, $def = '') {
     $val = atw_posts_get_slider_opt( $opt, $name );
     if ( $val != '' ) {
-        echo $opt . ':' . $val . ',';
+        echo esc_js($opt) . ':' . esc_js($val) . ',';
     } elseif ( $def != '' ) {
-        echo $opt . ':' . $def . ',';
+        echo esc_js($opt) . ':' . esc_js($def) . ',';
     }
 }
 
 function atw_slider_echo_opt_text( $opt, $name, $def = '') {
     $val = atw_posts_get_slider_opt( $opt, $name );
     if ( $val != '' ) {
-        echo $opt . ':"' . $val . '",';
+        echo esc_js($opt) . ':"' . esc_js($val) . '",';
     } elseif ( $def != '' ) {
-        echo $opt . ':"' . $def . '",';
+        echo esc_js($opt) . ':"' . esc_js($def) . '",';
     }
 }
 
@@ -547,19 +548,19 @@ function atw_slider_echo_opt_tf( $opt, $name, $def = false) {
     if ( strpos($opt, 'no_') !== false) {
         $opt_out = substr($opt, 3);
         if ( $val != '' ) {
-            echo $opt_out . ':false,';
+            echo esc_js($opt_out) . ':false,';
         } elseif ( $def ) {
-            echo $opt_out . ':false,';
+            echo esc_js($opt_out) . ':false,';
         } else {
-            echo $opt_out . ':true,';
+            echo esc_js($opt_out) . ':true,';
         }
     } else {
         if ( $val != '' ) {
-            echo $opt . ':true,';
+            echo esc_js($opt) . ':true,';
         } elseif ( $def ) {
-            echo $opt . ':true,';
+            echo esc_js($opt) . ':true,';
         } else {
-            echo $opt . ':false,';
+            echo esc_js($opt) . ':false,';
         }
     }
 }

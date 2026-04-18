@@ -6,10 +6,12 @@ Contributors: wpweaver
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: show-sliders
-Tags: slider, slide show, recent posts, responsive, responsive slider, [gallery], gallery slide show, slider options, slider shortcode, FlexSlider
+Tags: slider, slide show, recent posts, [gallery], gallery slide show
 Requires at least: 5.4
-Tested up to: 6.1
-Stable tag: 1.7
+Tested up to: 7.0
+Stable tag: 2.0
+
+Show Sliders partner to Show Posts plugin. Requires Show Post Plugin to work.
 
 == Description ==
 
@@ -97,6 +99,10 @@ normally appear in the rest of your site.
 * mousewheel is licensed under MIT
 
 == Changelog ==
+= 2.0 =
+* Major code refactoring
+* Passes Plugin Checks
+
 = 1.6 =
 * WP 6.1 version update
 

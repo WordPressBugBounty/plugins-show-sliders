@@ -1,4 +1,6 @@
 <?php
+// Code revised: 4/12/2026
+if ( ! defined( 'ABSPATH' ) ) exit;
 /* Copyright 2014, 2015 - WeaverTheme.com, Bruce E. Wampler */
 // ========================================= >>> atw_slider_pro_options <<< ===============================
 
@@ -111,7 +113,7 @@ function atw_slider_image_slider_layout() {
 
 <?php
 	foreach ( $imgSizes as $size ) {
-		echo '<option value="' . $size . '" ' . selected( $cur_opt == $size) . ">{$size}</option>\n";
+		echo wp_kses_post('<option value="' . $size . '" ' . selected( $cur_opt == $size) . ">{$size}</option>\n");
 	}
 ?>
 	</select>
@@ -142,9 +144,9 @@ function atw_slider_image_slider_layout() {
         <option value="" <?php selected( $cur_opt == '' );?>>Default</option>
 <?php
         for ( $i = 1 ; $i <= WEAVER_SLIDER_PI_NAV_ARROWS ; $i++ ) {
-            echo '<option value="' . $i . '" ' . selected( $cur_opt== $i) .
+            echo wp_kses_post('<option value="' . $i . '" ' . selected( $cur_opt== $i) .
                 'data-imagesrc="' . $src . $i . '.png"' .
-                "></option>\n";
+                "></option>\n");
         }
 ?>
 	</select></div>
@@ -250,7 +252,7 @@ function atw_slider_show_misc_opts() {
 <?php
     if ( atw_slider_pro() ) {
         foreach ( $easings as $easing ) {
-            echo '<option value="' . $easing . '" ' . selected( $cur_opt==$easing) . ">$easing</option>\n";
+            echo wp_kses_post('<option value="' . $easing . '" ' . selected( $cur_opt==$easing) . ">$easing</option>\n");
         }
     }
 ?>

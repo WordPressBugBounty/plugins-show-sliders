@@ -1,4 +1,6 @@
 <?php
+// Code revised: 4/12/2026
+if ( ! defined( 'ABSPATH' ) ) exit;
 // ========================================= >>> atw_slider_help_admin <<< ===============================
 function atw_slider_help_admin() {
     // admin for help
@@ -10,7 +12,7 @@ function atw_slider_help_admin() {
 <h2 style="color:blue;text-decoration:underline;">Show Sliders Quick Start</h2>
 
 <p style="color:green;font-weight:bold;font-size:140%;">
-    <?php echo $title; ?> <a href="<?php echo $t_dir; ?>" target="_blank" title="Weaver Show Sliders Help File">Show Sliders Help Document</a>
+    <?php echo esc_html($title); ?> <a href="<?php echo esc_html($t_dir); ?>" target="_blank" title="Weaver Show Sliders Help File">Show Sliders Help Document</a>
     <span style="font-size:80%;margin-left:20px;">Visit the official
     <a href="http://forum.weavertheme.com/categories/atw-show-posts-and-atw-show-sliders" target="_blank">help forum.</a></span>
     </p>

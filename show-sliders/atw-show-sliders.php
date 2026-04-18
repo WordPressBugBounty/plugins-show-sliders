@@ -1,16 +1,18 @@
 <?php
+// Code revised: 4/12/2026
+if ( ! defined( 'ABSPATH' ) ) exit;
 /*
 Plugin Name: Weaver Show Sliders
 Plugin URI: http://weavertheme.com/plugins/
-Description: Weaver Show Sliders - Show posts, images, and galleries displayed in a responsive slider with many options. Now includes former Pro features!
+Description: Weaver Show Sliders - Show posts, images, and galleries displayed in a responsive slider with many options.
 Author: wpweaver
 Author URI: http://weavertheme.com/about/
-Version: 1.7
+Version: 2.0
 
-License: GPL3
+License: GPLv2 or later
 
 Weaver Show Sliders
-Copyright (C) 2014-2023, Bruce E. Wampler - weaver@weavertheme.com
+Copyright (C) 2014-2026, Bruce E. Wampler - weaver@weavertheme.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-const WEAVER_SLIDER_PI_VERSION = '1.7';
+const WEAVER_SLIDER_PI_VERSION = '2.0';
 const WEAVER_SLIDER_PI_PRO = true;            // change this and the Plugin Name above when building Pro version
 const WEAVER_SLIDER_PI_MINIFY = '.min';        // '' for dev, '.min' for production
 
@@ -107,7 +109,9 @@ function atw_slider_plugins_loaded()
                 'all_items' => esc_html__('All', 'show-sliders') . ' ' . $plural_item,
                 'view_item' => esc_html__('View', 'show-sliders') . ' ' . $singular_item,
                 'search_items' => esc_html__('Search', 'show-sliders') . ' ' . $plural_item,
+                // translators: %s is name off a selected item.
                 'not_found' => esc_html(sprintf(__('No %s found', 'show-sliders'), $plural_item)),
+                // translators: %s is name off a selected item.
                 'not_found_in_trash' => esc_html(sprintf(__('No %s found in trash', 'show-sliders'), $plural_item)),
                 'parent_item_colon' => '',
                 'menu_name' => $plural_item,
@@ -233,7 +237,7 @@ function atw_slider_plugins_loaded()
         {
             ?>
             <p>
-                <?php _e('The <em>Weaver Slider Post</em> is a custom post type that is intended to help define Weaver Slider/Slideshows.
+                <?php esc_html_e('The <em>Weaver Slider Post</em> is a custom post type that is intended to help define Weaver Slider/Slideshows.
 This post type has all the features of a standard post, but because it is a custom post type, posts created using it
 will <strong>not</strong> appear on any of your normal blogs, category lists, tag lists, searches, or other archive-like pages.
 However, you can have <em>Weaver Slider Posts</em> display as standard posts by adding the "atw_slider_post" type to the
@@ -447,12 +451,13 @@ You can group sliders, or create different slide shows by specifying a <em>Slide
                 }
             }
 
-            echo $content;
+            echo esc_html($content);
+            echo "*******************************";
         }
 
 // ====================================== >>> atw_slider_get_gallery <<< ======================================
 
-        function atw_slider_get_gallery($content, $slider, $ids = array(), $lead_class = 'class="atwk-slide"', $lead_div = '<div class="slide-content slide-image">')
+        function atw_slider_get_gallery($content, $slider, $ids = array(), $lead_class = 'class="atwk-slide"', $lead_div = '<div class="slide-content slide-image show-sliders">')
         {
             // we will pass in either content, or a list of ids grabbed from the [gallery] shortcode replacement
 
@@ -653,7 +658,7 @@ You can group sliders, or create different slide shows by specifying a <em>Slide
 
 // ====================================== >>> atw_slider_get_first_post_image <<< ======================================
 
-        function atw_slider_get_first_post_image($content = '', $slider = '', $lead_class = 'class="atwk-slide"', $lead_div = '<div class="slide-content slide-image">')
+        function atw_slider_get_first_post_image($content = '', $slider = '', $lead_class = 'class="atwk-slide"', $lead_div = '<div class="slide-content slide-image show-sliders2">')
         {
 
             // We're getting this image from a post, so we will use the Post's Title and link to the post instead of the image.
@@ -895,9 +900,9 @@ You can group sliders, or create different slide shows by specifying a <em>Slide
 
         }
 
-        if (current_user_can('activate_plugins')) {
-            require_once((dirname(__FILE__) . '/includes/atw-activate-show-posts.php'));
-        }
+        //if (current_user_can('activate_plugins')) {
+        //    require_once((dirname(__FILE__) . '/includes/atw-activate-show-posts.php'));
+        //
 
     }   // end Show Posts not installed
 

@@ -1,4 +1,6 @@
 <?php
+// Code revised: 4/12/2026
+if ( ! defined( 'ABSPATH' ) ) exit;
 // ========================================= >>> atw_slider_slider_admin <<< ===============================
 function atw_slider_slider_admin() {
     // admin for style options...
@@ -68,9 +70,9 @@ function atw_slider_gallery_admin_page() {
         foreach ($sliders as $slider => $val) {     // display dropdown of available sliders
 
             if ( $slider == $cur_gallery_slider ) {
-                echo '<option value="'. $slider . '" selected="selected">' . $val['name'] . ' (' . $slider . ')</option>';
+                echo wp_kses_post('<option value="'. $slider . '" selected="selected">' . $val['name'] . ' (' . $slider . ')</option>');
             } else {
-                echo '<option value="'. $slider . '">' . $val['name'] .  ' (' . $slider . ')</option>';
+                echo wp_kses_post('<option value="'. $slider . '">' . $val['name'] .  ' (' . $slider . ')</option>');
             }
         }
         echo '</select>';
@@ -106,35 +108,7 @@ be able to show a fullsize view of the slider image in a Lightbox. This option a
 
 // ========================================= >>> atw_slider_submits <<< ===============================
 
-function atw_slider_submits() {
 
-    $actions = array( 'atw_slider_delete_slider', 'atw_slider_new_slider', 'atw_slider_duplicate_slider',
-                     'atw_slider_save_slider_options', 'atw_slider_header_slider', 'atw_slider_save_gallery_options',
-					 'atw_sliders_restore_filter'
-        );
-
-
-    // need to respond to onchange="this.form.submit()" for 'selected_slider'
-    if (atw_posts_get_POST( 'selected_slider')) {
-        $new_slider =  atw_posts_get_POST( 'selected_slider');
-        $cur_slider =  atw_posts_getopt('current_slider');
-        if ($cur_slider != $new_slider) {
-            atw_slider_set_to_slider(  );
-            return;
-        }
-    }
-
-    foreach ( $actions as $functionName ) {
-        if ( isset( $_POST[$functionName] ) ) {
-            if ( atw_posts_submitted( $functionName ) && function_exists( $functionName ) ) {
-                if ($functionName())
-                    break;
-            }
-        }
-    }
-
-    //do_action('atw_slider_process_license_options');    // process license options
-}
 
 function atw_slider_set_to_slider() {
     $selected = sanitize_title_with_dashes( atw_posts_get_POST( 'selected_slider' ) );
@@ -157,29 +131,6 @@ function atw_slider_set_to_slider() {
     // $name = atw_posts_get_slider_opt('name');
 
     //atw_posts_save_msg('Slider selected: ' . $name);
-    return true;
-}
-
-function atw_slider_delete_slider() {
-
-    $selected = sanitize_title_with_dashes( atw_posts_get_POST( 'selected_slider' ) );
-
-    // Validate
-    $sliders = atw_posts_getopt('sliders');
-    $found = false;
-    foreach ($sliders as $slider => $val) {
-        if ($slider == $selected) {
-            $found = true;
-            break;
-        }
-    }
-    if ( !$found ) {
-        atw_posts_error_msg("Slider not found. Try again.");
-        return true;
-    }
-
-    atw_posts_delete_slider_opts($selected);
-
     return true;
 }
 
@@ -377,23 +328,23 @@ function atw_slider_select_slider() {
 <!-- ** Current slider ** -->
 
 
-    <div class="filter-title">&bull; Current Slider: <em style="font-size:150%;color:#CC2323;"><?php echo atw_posts_get_slider_opt('name'); ?></em>
+    <div class="filter-title">&bull; Current Slider: <em style="font-size:150%;color:#CC2323;"><?php echo wp_kses_post(atw_posts_get_slider_opt('name')); ?></em>
     <span class="filter-title-description">Select a slider to define or edit </span>
-    <span style="color:black;font-size:90%;margin-left:5em;font-weight:bold;">Shortcode: [show_slider name=<?php echo $current_slider?>]</span></div>
+    <span style="color:black;font-size:90%;margin-left:5em;font-weight:bold;">Shortcode: [show_slider name=<?php echo wp_kses_post($current_slider) ?>]</span></div>
 <?php
 
     $sliders = atw_posts_getopt('sliders');
 	$cur_slug = '';
 	$cur_name = '';
 
-    echo '<table><tr><td><strong>Select Slider:&nbsp; </strong></td><td><select onchange="this.form.submit()" name="selected_slider" >';
+    echo wp_kses_post('<table><tr><td><strong>Select Slider:&nbsp; </strong></td><td><select onchange="this.form.submit()" name="selected_slider" >');
     foreach ($sliders as $slider => $val) {     // display dropdown of available sliders
         if ($slider == $current_slider) {
-            echo '<option value="'. $slider . '" selected="selected">' . $val['name'] . ' (' . $slider . ')</option>';
+            echo wp_kses_post('<option value="'. $slider . '" selected="selected">' . $val['name'] . ' (' . $slider . ')</option>');
 			$cur_slug = $slider;
 			$cur_name = $val['name'];
         } else {
-            echo '<option value="'. $slider . '">' . $val['name'] .  ' (' . $slider . ')</option>';
+            echo wp_kses_post('<option value="'. $slider . '">' . $val['name'] .  ' (' . $slider . ')</option>');
         }
     }
     echo '</select>';
@@ -412,7 +363,7 @@ function atw_slider_select_slider() {
 
 	<?php
 	if (function_exists('atw_posts_download_link')) {
-		$time = date('Y-m-d-Hi');
+		$time = gmdate('Y-m-d-Hi');
 		atw_posts_download_link('<strong>Save Settings</strong> for current slider <strong>' . $cur_name . '</strong>.',
 			$cur_slug, 'slider', $time );
 	}
@@ -506,16 +457,16 @@ function atw_slider_required_options() {
         $current_filter = 'default';
     }
 
-    echo '<p><span style="margin-left:1.5em;margin-right:3em;font-weight:bold;">Slider Filter:</span><select id="selected_slider_filter" name="selected_slider_filter" >';
+    echo wp_kses_post('<p><span style="margin-left:1.5em;margin-right:3em;font-weight:bold;">Slider Filter:</span><select id="selected_slider_filter" name="selected_slider_filter" >');
     foreach ($filters as $filter => $val) {     // display dropdown of available filters
         if ($filter == $current_filter) {
-            echo '<option value="'. $filter . '" selected="selected">' . $val['name'] . '</option>';
+            echo wp_kses_post('<option value="'. $filter . '" selected="selected">' . $val['name'] . '</option>');
         } else {
-            echo '<option value="'. $filter . '">' . $val['name'] . '</option>';
+            echo wp_kses_post('<option value="'. $filter . '">' . $val['name'] . '</option>');
         }
     }
 
-    echo '</select><span style="margin-left:1.5em;font-weight:bold;">You must select a filter</span> (defined on <em>Filter</em> tab) to define content displayed by this slider - or use <span style="color:green;">Quick Option</span> below.';
+    echo wp_kses_post('</select><span style="margin-left:1.5em;font-weight:bold;">You must select a filter</span> (defined on <em>Filter</em> tab) to define content displayed by this slider - or use <span style="color:green;">Quick Option</span> below.');
 
     $sp_posts = get_posts( array( 'posts_per_page' => -1, 'order'=>'ASC', 'orderby'=>'title', 'post_type'=>'atw_slider_post' ));
 
@@ -533,9 +484,9 @@ function atw_slider_required_options() {
         echo '&nbsp;&nbsp;&nbsp;<select style="min-width:30px;" id="slider_post_slug" name="slider_post_slug" >';
         foreach ($slugs as $slug) {
             if ($slug == $cur_slug) {
-                echo '<option value="'. $slug . '" selected="selected">' . $slug . '</option>';
+                echo wp_kses_post('<option value="'. $slug . '" selected="selected">' . $slug . '</option>');
             } else {
-                echo '<option value="'. $slug . '">' . $slug . '</option>';
+                echo wp_kses_post('<option value="'. $slug . '">' . $slug . '</option>');
             }
         }
         echo '</select> &nbsp;&nbsp; Use selected "Slider Post" for slider images <strong>instead</strong> of <em>Slider Filter</em>.<br />';
@@ -585,11 +536,11 @@ function atw_slider_required_options() {
 // ========================================= >>> atw_posts_slider_checkbox + others <<< ===============================
 
 function atw_slider_print_r($var, $return=false) {
-
+// not used except for debugging
     if ( $return ) {
         return '<pre>' . print_r( $var, $return ) . '</pre>';
     }
-    echo '<pre>' . print_r( $var, true ) . '</pre>';
+    echo wp_kses_post('<pre>' . print_r( $var, true ) . '</pre>');
 }
 
 function atw_slider_start_section() {
@@ -610,16 +561,16 @@ function atw_posts_slider_checkbox($id, $desc, $br = '<br />') {
         $is_pro = true;
     }
 ?>
-    <div style="display:inline;padding-left:2.5em;text-indent:-1.7em;"><label><input type="checkbox" name="<?php echo $id ?>" id="<?php echo $id; ?>"
+    <div style="display:inline;padding-left:2.5em;text-indent:-1.7em;"><label><input type="checkbox" name="<?php echo esc_attr($id) ?>" id="<?php echo esc_attr($id); ?>"
         <?php checked(atw_posts_get_slider_opt($id) ); ?> >&nbsp;
 <?php
 
 
-echo $desc . '</label></div>' . $br . "\n";
+echo wp_kses_post($desc . '</label></div>' . $br . "\n");
 }
 
 function atw_slider_subheader($header, $desc = '' ) {
-    echo '<div style="padding-bottom:.3em;"><span style="color:#00a;font-weight:bold;font-style:italic;padding-left:1.5em;padding-right:1.5em;">' . $header . '</span>' . $desc . '</div>';
+    echo wp_kses_post('<div style="padding-bottom:.3em;"><span style="color:#00a;font-weight:bold;font-style:italic;padding-left:1.5em;padding-right:1.5em;">' . $header . '</span>' . $desc . '</div>');
 }
 
 function atw_posts_slider_textarea($id, $desc, $br = '<br />', $cols = 32, $rows=1, $maxlength = 64) {
@@ -641,9 +592,9 @@ function atw_posts_slider_textarea($id, $desc, $br = '<br />', $cols = 32, $rows
     }
 ?>
     <span style="margin-top:5px;display:inline;padding-left:2.5em;"><label>
-    <textarea style="margin-bottom:-8px;max-width:90%;" cols=<?php echo $cols; ?> rows=<?php echo $rows;?> maxlength=<?php echo $maxlength; ?> name="<?php echo $id; ?>"><?php echo esc_attr( $text ); ?></textarea>
+    <textarea style="margin-bottom:-8px;max-width:90%;" cols=<?php echo wp_kses_post($cols); ?> rows=<?php echo wp_kses_post($rows);?> maxlength=<?php echo wp_kses_post($maxlength); ?> name="<?php echo wp_kses_post($id); ?>"><?php echo esc_attr( $text ); ?></textarea>
     &nbsp;
-<?php   echo $desc . '</label></span>' . $br . "\n";
+<?php   echo wp_kses_post($desc . '</label></span>' . $br . "\n");
 }
 
 function atw_posts_slider_val($id, $desc, $units = '', $width = '60px',  $br = '<br />') {
@@ -658,64 +609,11 @@ function atw_posts_slider_val($id, $desc, $units = '', $width = '60px',  $br = '
         $units = '<strong>' . $units . '</strong>';
 ?>
     <div style = "margin-top:0px;display:inline-block;padding-left:4em;text-indent:-1.7em;"><label>
-    <input class="regular-text" type="text" style="width:<?php echo $width;?>;height:22px;" name="<?php echo $id; ?>" value="<?php echo sanitize_text_field( atw_posts_get_slider_opt($id) ); ?>" />
-<?php   echo $units . '&nbsp;&nbsp;&nbsp;' . $desc . '</label></div>' . $br . "\n";
+    <input class="regular-text" type="text" style="width:<?php echo wp_kses_post($width);?>;height:22px;" name="<?php echo wp_kses_post($id); ?>" value="<?php echo esc_attr( atw_posts_get_slider_opt($id) ); ?>" />
+<?php   echo wp_kses_post($units . '&nbsp;&nbsp;&nbsp;' . $desc . '</label></div>' . $br . "\n");
 }
 
 
-
-function atw_sliders_restore_filter() {
-	if (!(isset($_POST['suploadit']) && $_POST['suploadit'] == 'yes')) return;
-
-    // upload theme from users computer
-	// they've supplied and uploaded a file
-
-	$ok = true;     // no errors so far
-
-	if (isset($_FILES['slideruploaded']['name']))
-		$filename = $_FILES['slideruploaded']['name'];
-	else
-		$filename = "";
-
-	if (isset($_FILES['slideruploaded']['tmp_name'])) {
-		$openname = $_FILES['slideruploaded']['tmp_name'];
-	} else {
-		$openname = "";
-	}
-
-	//Check the file extension
-	$check_file = strtolower($filename);
-	$pat = '.';				// PHP version strict checking bug...
-	$end = explode($pat, $check_file);
-	$ext_check = end($end);
-
-
-	if ($filename == "") {
-		$errors[] = 'You didn\'t select a file to upload.' . "<br />";
-		$ok = false;
-	}
-
-	if (!$ok) {
-		echo '<div id="message" class="updated fade"><p><strong><em style="color:red;">' .
-		'ERROR' . '</em></strong></p><p>';
-		foreach($errors as $error){
-			echo $error.'<br />';
-		}
-		echo '</p></div>';
-	} else {    // OK - read file and save to My Saved Theme
-		// $handle has file handle to temp file.//
-		$contents = file_get_contents($openname);
-
-		if ( ! atw_slider_set_to_serialized_values($contents) ) {
-				echo '<div id="message" class="updated fade"><p><strong><em style="color:red;">' .
-'Sorry, there was a problem uploading your file.
-The file you picked was not a valid Weaver Show Sliders settings file.' .
-'</em></strong></p></div>';
-		} else {
-			atw_posts_save_msg( 'Weaver Show Sliders set to uploaded Slider.' );
-		}
-	}
-}
 
 function atw_slider_set_to_serialized_values($contents) {
 
@@ -741,3 +639,106 @@ function atw_slider_set_to_serialized_values($contents) {
 	return true;
 }
 
+function atw_slider_submits() {
+
+    $actions = array( 'atw_slider_delete_slider', 'atw_slider_new_slider', 'atw_slider_duplicate_slider',
+            'atw_slider_save_slider_options', 'atw_slider_header_slider', 'atw_slider_save_gallery_options',
+            'atw_sliders_restore_filter'
+    );
+
+
+    // need to respond to onchange="this.form.submit()" for 'selected_slider'
+    if (atw_posts_get_POST( 'selected_slider')) {
+        $new_slider =  atw_posts_get_POST( 'selected_slider');
+        $cur_slider =  atw_posts_getopt('current_slider');
+        if ($cur_slider != $new_slider) {
+            atw_slider_set_to_slider(  );
+            return;
+        }
+    }
+
+    foreach ( $actions as $functionName ) {
+        if ( isset( $_POST[$functionName] ) ) {
+            if ( atw_posts_submitted( $functionName ) && function_exists( $functionName ) ) {
+                if ($functionName())
+                    break;
+            }
+        }
+    }
+
+    //do_action('atw_slider_process_license_options');    // process license options
+}
+function atw_sliders_restore_filter() {
+    if (!(isset($_POST['suploadit']) && $_POST['suploadit'] == 'yes')) return;
+
+    // upload theme from users computer
+    // they've supplied and uploaded a file
+
+    $ok = true;     // no errors so far
+
+    if (isset($_FILES['slideruploaded']['name']))
+        $filename = $_FILES['slideruploaded']['name'];
+    else
+        $filename = "";
+
+    if (isset($_FILES['slideruploaded']['tmp_name'])) {
+        $openname = $_FILES['slideruploaded']['tmp_name'];
+    } else {
+        $openname = "";
+    }
+
+    //Check the file extension
+    $check_file = strtolower($filename);
+    $pat = '.';				// PHP version strict checking bug...
+    $end = explode($pat, $check_file);
+    $ext_check = end($end);
+
+
+    if ($filename == "") {
+        $errors[] = 'You didn\'t select a file to upload.' . "<br />";
+        $ok = false;
+    }
+
+    if (!$ok) {
+        echo wp_kses_post('<div id="message" class="updated fade"><p><strong><em style="color:red;">' .
+                'ERROR' . '</em></strong></p><p>');
+        foreach($errors as $error){
+            echo wp_kses_post($error.'<br />');
+        }
+        echo '</p></div>';
+    } else {    // OK - read file and save to My Saved Theme
+        // $handle has file handle to temp file.//
+        $contents = file_get_contents($openname);
+
+        if ( ! atw_slider_set_to_serialized_values($contents) ) {
+            echo '<div id="message" class="updated fade"><p><strong><em style="color:red;">' .
+                    'Sorry, there was a problem uploading your file.
+The file you picked was not a valid Weaver Show Sliders settings file.' .
+                    '</em></strong></p></div>';
+        } else {
+            atw_posts_save_msg( 'Weaver Show Sliders set to uploaded Slider.' );
+        }
+    }
+}
+function atw_slider_delete_slider() {
+
+    $selected = sanitize_title_with_dashes( atw_posts_get_POST( 'selected_slider' ) );
+
+    // Validate
+    $sliders = atw_posts_getopt('sliders');
+    $found = false;
+    foreach ($sliders as $slider => $val) {
+        if ($slider == $selected) {
+            $found = true;
+            break;
+        }
+    }
+    if ( !$found ) {
+        atw_posts_error_msg("Slider not found. Try again.");
+        return true;
+    }
+
+    atw_posts_delete_slider_opts($selected);
+
+    return true;
+}
