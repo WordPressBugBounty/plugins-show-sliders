@@ -7,7 +7,7 @@ Plugin URI: http://weavertheme.com/plugins/
 Description: Weaver Show Sliders - Show posts, images, and galleries displayed in a responsive slider with many options.
 Author: wpweaver
 Author URI: http://weavertheme.com/about/
-Version: 2.0
+Version: 2.0.4
 
 License: GPLv2 or later
 
@@ -451,8 +451,9 @@ You can group sliders, or create different slide shows by specifying a <em>Slide
                 }
             }
 
-            echo esc_html($content);
-            echo "*******************************";
+           // echo esc_html($content);
+            echo wp_kses_post($content);
+            //echo "*******************************";
         }
 
 // ====================================== >>> atw_slider_get_gallery <<< ======================================

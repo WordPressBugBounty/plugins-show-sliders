@@ -113,7 +113,7 @@ function atw_slider_image_slider_layout() {
 
 <?php
 	foreach ( $imgSizes as $size ) {
-		echo wp_kses_post('<option value="' . $size . '" ' . selected( $cur_opt == $size) . ">{$size}</option>\n");
+		echo '<option value="' . esc_attr($size) . '" ' . selected( $cur_opt == $size) . ">". esc_attr($size). "</option>\n";
 	}
 ?>
 	</select>
@@ -138,18 +138,18 @@ function atw_slider_image_slider_layout() {
     // stick it into the hidden <input> field to pass the value back via the form.
  ?>
  <div style="padding:20px 15px 5px 30px;float:left;"><em>Select Navigation Arrows:</em></div>
- <div style="padding-top:5px;float:left;">
-    <input type="hidden" name="navArrows" id="navArrows" value="" />
-    <select id="navArrowsDD" name="navArrowsDD" style="padding-top:100px">
-        <option value="" <?php selected( $cur_opt == '' );?>>Default</option>
-<?php
-        for ( $i = 1 ; $i <= WEAVER_SLIDER_PI_NAV_ARROWS ; $i++ ) {
-            echo wp_kses_post('<option value="' . $i . '" ' . selected( $cur_opt== $i) .
-                'data-imagesrc="' . $src . $i . '.png"' .
-                "></option>\n");
-        }
-?>
-	</select></div>
+    <div style="padding-top:5px;float:left;">
+        <input type="hidden" name="navArrows" id="navArrows" value="" /> <!--- this is what sets the arrow choice --->
+        <select id="navArrowsDD" name="navArrowsDD" style="padding-top:100px">
+            <option value="" <?php selected( $cur_opt == '' );?>>Default</option>
+            <?php
+            for ( $i = 1 ; $i <= WEAVER_SLIDER_PI_NAV_ARROWS ; $i++ ) {
+                echo '<option value="' . esc_attr($i) . '" ' . selected( $cur_opt== $i) .
+                        'data-imagesrc="' . esc_attr($src) . esc_attr($i) . '.png"' .
+                        "></option>\n";
+            }
+            ?>
+        </select></div>
  <div style="float:left;padding:5px 5px 5px 24px;max-width:350px;">
     <small>You may change the navigation arrows. Different arrows will
     look better or worse depending on margins and bg colors.</small>

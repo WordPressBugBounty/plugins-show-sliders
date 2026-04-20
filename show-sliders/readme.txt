@@ -9,7 +9,7 @@ Text Domain: show-sliders
 Tags: slider, slide show, recent posts, [gallery], gallery slide show
 Requires at least: 5.4
 Tested up to: 7.0
-Stable tag: 2.0
+Stable tag: 2.0.4
 
 Show Sliders partner to Show Posts plugin. Requires Show Post Plugin to work.
 

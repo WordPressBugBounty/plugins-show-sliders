@@ -45,20 +45,21 @@ function atw_posts_save_slider_button() {
 function atw_slider_gallery_admin_page() {
     // admin for style options...
 ?>
-   <h2 style="color:blue;">[gallery] Replacement</h2>
-   <p>
-    Weaver Show Sliders can serve as a replacement for the standard [gallery] shortcode. If you enable this option,
-    then <em>all</em> places you use a [gallery] shortcode in a standard post or page will be displayed as a slider.
-   </p>
-        <form method="post" enctype="multipart/form-data">
+
+    <h2 style="color:blue;">[gallery] Replacement</h2>
+    <p>
+        Weaver Show Sliders can serve as a replacement for the standard [gallery] shortcode. If you enable this option,
+        then <em>all</em> places you use a [gallery] shortcode in a standard post or page will be displayed as a slider.
+    </p>
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="atw_slider_save_gallery_opts" value="Slider Options Saved" />
-<?php
+        <?php
         atw_posts_nonce_field('atw_slider_save_gallery_opts');
         atw_posts_nonce_field('atw_slider_save_gallery_options');
-?>
+        ?>
         <div style="display:inline;padding-left:2.5em;text-indent:-1.7em;"><label><input type="checkbox" name="enable_gallery_slider" id="enable_gallery_slider"
-        <?php checked(atw_posts_getopt('enable_gallery_slider') ); ?> >&nbsp;Enable [gallery] replacement - show [gallery] as slider.</label></div>
-<?php
+                        <?php checked(atw_posts_getopt('enable_gallery_slider') ); ?> >&nbsp;Enable [gallery] replacement - show [gallery] as slider.</label></div>
+        <?php
 
         $sliders = atw_posts_getopt('sliders');
 
@@ -70,21 +71,14 @@ function atw_slider_gallery_admin_page() {
         foreach ($sliders as $slider => $val) {     // display dropdown of available sliders
 
             if ( $slider == $cur_gallery_slider ) {
-                echo wp_kses_post('<option value="'. $slider . '" selected="selected">' . $val['name'] . ' (' . $slider . ')</option>');
+                echo '<option value="'. esc_attr($slider) . '" selected="selected">' . esc_attr($val['name']) . ' (' . esc_attr($slider) . ') </option>';
             } else {
-                echo wp_kses_post('<option value="'. $slider . '">' . $val['name'] .  ' (' . $slider . ')</option>');
+                echo '<option value="'. esc_attr($slider) . '">' . esc_attr($val['name']) .  ' (' . esc_attr($slider) . ')</option>';
             }
         }
         echo '</select>';
 
-?>
-<p>
-    When you use the [gallery] replacement, you must specify a Slider definition to determine how to display the gallery slider.
-    Set up a Slider on the <em>Sliders</em> tab. Any Slider used for a [gallery] will automatically display Images, and will
-    ignore any options related to Posts. Only the image "ids" included in the [gallery] shortcode is used. No other [gallery]
-	options such as 'order', 'link', etc. are processed.
-</p>
-
+        ?>
 <h2 style="color:blue;">Use Lightbox</h2>
 <p>
 Weaver Show Posts can add a pop-up Lightbox to your slider images. When this option is checked, the visitor will
@@ -337,14 +331,14 @@ function atw_slider_select_slider() {
 	$cur_slug = '';
 	$cur_name = '';
 
-    echo wp_kses_post('<table><tr><td><strong>Select Slider:&nbsp; </strong></td><td><select onchange="this.form.submit()" name="selected_slider" >');
+    echo '<table><tr><td><strong>Select Slider:&nbsp; </strong></td><td><select onchange="this.form.submit()" name="selected_slider" >';
     foreach ($sliders as $slider => $val) {     // display dropdown of available sliders
         if ($slider == $current_slider) {
-            echo wp_kses_post('<option value="'. $slider . '" selected="selected">' . $val['name'] . ' (' . $slider . ')</option>');
+            echo '<option value="'. esc_attr($slider ). '" selected="selected">' . esc_attr($val['name']) . ' (' . esc_attr($slider ). ')</option>';
 			$cur_slug = $slider;
 			$cur_name = $val['name'];
         } else {
-            echo wp_kses_post('<option value="'. $slider . '">' . $val['name'] .  ' (' . $slider . ')</option>');
+            echo '<option value="'. esc_attr($slider) . '">' . esc_attr($val['name']) .  ' (' . esc_attr($slider) . ')</option>';
         }
     }
     echo '</select>';
@@ -484,9 +478,9 @@ function atw_slider_required_options() {
         echo '&nbsp;&nbsp;&nbsp;<select style="min-width:30px;" id="slider_post_slug" name="slider_post_slug" >';
         foreach ($slugs as $slug) {
             if ($slug == $cur_slug) {
-                echo wp_kses_post('<option value="'. $slug . '" selected="selected">' . $slug . '</option>');
+                echo '<option value="'. esc_attr($slug) . '" selected="selected">' . esc_attr($slug) . '</option>';
             } else {
-                echo wp_kses_post('<option value="'. $slug . '">' . $slug . '</option>');
+                echo '<option value="'. esc_attr($slug) . '">' . esc_attr($slug) . '</option>';
             }
         }
         echo '</select> &nbsp;&nbsp; Use selected "Slider Post" for slider images <strong>instead</strong> of <em>Slider Filter</em>.<br />';
